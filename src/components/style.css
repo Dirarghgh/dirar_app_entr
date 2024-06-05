@@ -1,0 +1,117 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  color: var(--Light-Typography-Color-Heading-Text, #4b465c);
+  font-weight: 700;
+  line-height: 109%;
+  padding: 25px 14px 0px 19px;
+}
+
+.header-logo {
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Public Sans, sans-serif;
+  flex: 1;
+ 
+  
+}
+
+.logo-image {
+  padding-bottom: 5px;
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 22px; /* Adjusted width for better visibility */
+
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ensure the sidebar takes the full height */
+  padding: 10px;
+  background-color: #fff; /* Adjust background color if needed */
+}
+
+.menu-close-btn {
+  color: var(--current-color);
+}
+
+.notification-count {
+  background-color: #F0C43C;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%);
+}
+.dashboard-info {
+  display: flex;
+  align-items: center;
+}
+
+.notification-circle {
+  background-color: #F0C43C;
+  color: white;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 30px ; /* Pushes the following icon to the right */
+}
+.notification-circle2 {
+  background-color: #F0C43C;
+  color: white;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 22px ; /* Pushes the following icon to the right */
+}
+
+.icon-chevron {
+  margin-left: 10px; /* Adjust this margin as needed */
+}
+
+
+     
+     
+
+.sidebar-container {
+  /* Your existing styles */
+}
+
+/* Style for active link */
+.sidebar-container .active-link {
+  background-color: #F0C43C;
+  color: #FFFFFF; /* White text color */
+}
+
+/* Style for normal link */
+.sidebar-container .normal-link {
+  background-color: transparent;
+  color: #646464; /* Dark gray text color */
+}
+
+/* Style for notification dots */
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: yellow;
+}
+
+/* Your existing styles */
+
+.active {
+  background-color: yellow;
+  /* Add any other styling you need for the active link */
+}
