@@ -1,25 +1,26 @@
 import React, { useRef, useState } from 'react';
 import { Header } from '../components'; // Assuming Header is imported from the correct path
 import styled from "styled-components";
+import { Formik, Form, Field } from 'formik'; // Import Formik utilities
 
 const data = [
   [
-    { label: "Nom de la concession", type: "text", width: "50%" },
-    { label: "Matière", type: "text", width: "50%" }
+    { name: "concessionName", label: "Nom de la concession", type: "text", width: "50%" },
+    { name: "material", label: "Matière", type: "text", width: "50%" }
   ],
   [
-    { label: "Date début de l’exploitation", type: "text", width: "50%" },
-    { label: "Date fin de l’exploitation", type: "text", width: "50%" }
+    { name: "startDate", label: "Date début de l’exploitation", type: "text", width: "50%" },
+    { name: "endDate", label: "Date fin de l’exploitation", type: "text", width: "50%" }
   ],
   [
-    { label: "Date début de l’investissement", type: "text", width: "50%" },
-    { label: "Date fin de l’investissement", type: "text", width: "50%" }
+    { name: "investmentStartDate", label: "Date début de l’investissement", type: "text", width: "50%" },
+    { name: "investmentEndDate", label: "Date fin de l’investissement", type: "text", width: "50%" }
   ],
-  { label: "Nombre maximum d’investisseur", type: "number", width: "100%" },
-  { label: "Montant minimum d’investissement", type: "number", width: "100%" },
-  { label: "Taux", type: "number", width: "100%" },
-  { label: "Montant total des investissement à atteindre", type: "number", width: "100%" },
-  { label: "Description", type: "textarea", width: "100%" },
+  { name: "maxInvestors", label: "Nombre maximum d’investisseur", type: "number", width: "100%" },
+  { name: "minInvestmentAmount", label: "Montant minimum d’investissement", type: "number", width: "100%" },
+  { name: "rate", label: "Taux", type: "number", width: "100%" },
+  { name: "totalInvestmentAmount", label: "Montant total des investissement à atteindre", type: "number", width: "100%" },
+  { name: "description", label: "Description", type: "textarea", width: "100%" },
 ];
 
 const Create = () => {
@@ -30,38 +31,55 @@ const Create = () => {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Logic to handle form submission goes here
-    console.log('Form submitted');
-    setFormSubmitted(true); // Set the formSubmitted state to true
-  };
-
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
       <Header title="Gestion des concessions" />
       <p style={{ color: 'gray', fontSize: '18px' }}>Créer une Concessions</p>
       <MainSection>
-        <Form onSubmit={handleSubmit}>
-          {data.map((row, index) => (
-            <Row key={index}>
-              {Array.isArray(row) ? (
-                row.map((field, i) => (
-                  <FormField key={i} label={field.label} type={field.type} width={field.width} />
-                ))
-              ) : (
-                <FormField key={index} label={row.label} type={row.type} width={row.width} />
-              )}
-            </Row>
-          ))}
-          <MediaUploadForm fileInputRef={fileInputRef} handleBrowseClick={handleBrowseClick} />
-          <SubmitButton type="submit">Créer</SubmitButton>
-        </Form>
-        {formSubmitted && <SubmissionMessage>Formulaire est soumis!</SubmissionMessage>}
+        <Formik
+          initialValues={{
+            concessionName: '',
+            material: '',
+            startDate: '',
+            endDate: '',
+            investmentStartDate: '',
+            investmentEndDate: '',
+            maxInvestors: '',
+            minInvestmentAmount: '',
+            rate: '',
+            totalInvestmentAmount: '',
+            description: ''
+          }}
+          onSubmit={(values, actions) => {
+            console.log('Form submitted with values:', values);
+            setFormSubmitted(true);
+            actions.setSubmitting(false);
+          }}
+        >
+          {formik => (
+            <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              {data.map((row, index) => (
+                <Row key={index}>
+                  {Array.isArray(row) ? (
+                    row.map((field, i) => (
+                      <FormField key={i} name={field.name} label={field.label} type={field.type} width={field.width} />
+                    ))
+                  ) : (
+                    <FormField key={index} name={row.name} label={row.label} type={row.type} width={row.width} />
+                  )}
+                </Row>
+              ))}
+              <MediaUploadForm fileInputRef={fileInputRef} handleBrowseClick={handleBrowseClick} />
+              <SubmitButton type="submit">Créer</SubmitButton>
+              {formSubmitted && <SubmissionMessage>Formulaire est soumis!</SubmissionMessage>}
+            </form>
+          )}
+        </Formik>
       </MainSection>
     </div>
   );
 };
+
 
 const MainSection = styled.section`
   display: flex;
@@ -70,16 +88,10 @@ const MainSection = styled.section`
   color: var(--Light-Typography-Color-Heading-Text, #4b465c);
   font-weight: 400;
   padding: 43px 24px 0;
+  position: relative; /* Add relative positioning */
   @media (max-width: 991px) {
     padding: 0 20px;
   }
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: flex-start;
 `;
 
 const Row = styled.div`
@@ -99,7 +111,7 @@ const Label = styled.label`
   font-family: Public Sans, sans-serif;
 `;
 
-const Input = styled.input`
+const Input = styled(Field)`
   border-radius: 6px;
   border: 1px solid rgba(219, 218, 222, 1);
   background-color: var(--Light-Solid-Color-Extra-Card-Background, #fff);
@@ -108,7 +120,7 @@ const Input = styled.input`
   width: 100%;
 `;
 
-const Textarea = styled.textarea`
+const Textarea = styled(Field)`
   border-radius: 6px;
   border: 1px solid rgba(219, 218, 222, 1);
   background-color: var(--Light-Solid-Color-Extra-Card-Background, #fff);
@@ -117,16 +129,16 @@ const Textarea = styled.textarea`
   width: 100%;
 `;
 
-const FormField = ({ label, type, width }) => {
+const FormField = ({ name, label, type, width }) => {
   return type === "textarea" ? (
     <FieldWrapper width={width}>
-      <Label>{label}</Label>
-      <Textarea />
+      <Label htmlFor={name}>{label}</Label>
+      <Textarea id={name} name={name} component="textarea" />
     </FieldWrapper>
   ) : (
     <FieldWrapper width={width}>
-      <Label>{label}</Label>
-      <Input type={type} />
+      <Label htmlFor={name}>{label}</Label>
+      <Input id={name} name={name} type={type} />
     </FieldWrapper>
   );
 };
@@ -213,7 +225,6 @@ const MediaUploadForm = ({ fileInputRef, handleBrowseClick }) => {
     </StyledForm>
   );
 };
-
 const SubmitButton = styled.button`
   padding: 10px 20px;
   background-color: #f1c53d;
@@ -224,8 +235,8 @@ const SubmitButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: 160px;
-  align-self: flex-end;
-  
+  align-self: flex-end; /* Align to the right */
+  margin-top: 20px; /* Add some top margin */
   &:hover {
     background-color: #d7b03c;
   }
